@@ -1,5 +1,6 @@
 package com.parameters.prts.Views;
 
+import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
 import com.parameters.prts.Model.ParameterEntity;
 import com.parameters.prts.Service.ParameterService;
@@ -13,7 +14,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -41,6 +43,7 @@ public class ParameterView extends Div {
 
     private Button cancel = new Button("Отмена");
     private Button save = new Button("Сохранить");
+    private Button delete = new Button("Удалить");
 
     private BeanValidationBinder<ParameterEntity> binder;
 
@@ -56,12 +59,13 @@ public class ParameterView extends Div {
         createEditorLayout(splitLayout);
         add(splitLayout);
 
-        grid.addColumn("vid").setAutoWidth(true);
-        grid.addColumn("edinIzmeren").setAutoWidth(true);
-        grid.addColumn("oblastPrimenen").setAutoWidth(true);
-        grid.addColumn("nameFP").setAutoWidth(true);
-        grid.addColumn("opisanieFP").setAutoWidth(true);
-        grid.addColumn("refer").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getVid).setHeader("Вид").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getEdinIzmeren).setHeader("Единица измерения").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getOblastPrimenen).setHeader("Область применения").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getNameFP).setHeader("Название ФП").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getOpisanieFP).setHeader("Описание ФП").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getRefer).setHeader("Ссылка").setAutoWidth(true);
+
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -103,6 +107,19 @@ public class ParameterView extends Div {
                 Notification.show("Не удалось сохранить :(");
             }
         });
+
+        delete.addClickListener(event -> {
+            if (this.parameter != null && this.parameter.getId() != null) {
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog("Удаление объекта",
+                        "Вы действительно хотите удалить объект " + this.parameter.getNameFP() + " ?", confirm -> {
+                    this.parameterService.delete(this.parameter.getId());
+                    clearForm();
+                    refreshGrid();
+                    Notification.show("Параметр удалён");
+                });
+                confirmationDialog.open();
+            }
+        });
     }
 
     private void createEditorLayout(SplitLayout splitLayout) {
@@ -133,14 +150,15 @@ public class ParameterView extends Div {
     }
 
     private void createButtonLayout(Div editorLayoutDiv) {
-        HorizontalLayout buttonLauout = new HorizontalLayout();
-        buttonLauout.setId("button-layout");
-        buttonLauout.setWidthFull();
-        buttonLauout.setSpacing(true);
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        VerticalLayout buttonLayout = new VerticalLayout();
+        buttonLayout.setId("button-layout");
+        buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        buttonLayout.setSpacing(true);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonLauout.add(save, cancel);
-        editorLayoutDiv.add(buttonLauout);
+        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        cancel.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        buttonLayout.add(save, delete, cancel);
+        editorLayoutDiv.add(buttonLayout);
     }
 
     private void createGridLayout(SplitLayout splitLayout) {
