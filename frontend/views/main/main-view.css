@@ -2,10 +2,6 @@
   height: var(--lumo-size-xl);
   box-shadow: var(--lumo-box-shadow-s);
 }
-vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
-  margin-left: var(--lumo-space-m);
-  margin-right: auto;
-}
 #header h1 {
   font-size: var(--lumo-font-size-l);
   margin: 0;
@@ -38,4 +34,8 @@ vaadin-tab:hover {
 vaadin-tab[selected] {
   background-color: var(--lumo-primary-color-10pct);
   color: var(--lumo-primary-text-color);
+}
+
+.bold-label {
+  font-weight: bold;
 }
