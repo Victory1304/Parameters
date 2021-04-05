@@ -13,11 +13,4 @@ public class VidEntity extends BaseEntity {
 //
 //    private SecondaryEntity secondary;
 
-    public VidEntity() {
-    }
-
-    public VidEntity(VidEntity vid) {
-
-    }
-
 }

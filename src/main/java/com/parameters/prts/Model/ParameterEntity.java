@@ -1,6 +1,8 @@
 package com.parameters.prts.Model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "prts")
@@ -25,16 +27,6 @@ public class ParameterEntity extends BaseEntity {
     private String refer;
 
     public ParameterEntity() {
-    }
-
-    public ParameterEntity(ParameterEntity parameter) {
-        this.id = parameter.getId();
-        this.vid = parameter.getVid();
-        this.edinIzmeren = parameter.getEdinIzmeren();
-        this.opisanieFP = parameter.getOpisanieFP();
-        this.oblastPrimenen = parameter.getOblastPrimenen();
-        this.nameFP = parameter.getNameFP();
-        this.refer = parameter.getRefer();
     }
 
     public String getVid() {

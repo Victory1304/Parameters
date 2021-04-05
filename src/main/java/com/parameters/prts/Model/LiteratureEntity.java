@@ -1,6 +1,8 @@
 package com.parameters.prts.Model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "literature")
@@ -30,14 +32,6 @@ public class LiteratureEntity extends BaseEntity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public LiteratureEntity() {
-    }
-
-    public LiteratureEntity(LiteratureEntity lit) {
-        this.site = lit.site;
-        this.title = lit.title;
     }
 
     //    public ParameterEntity getPrts() {

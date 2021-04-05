@@ -15,16 +15,6 @@ public class NameEntity extends BaseEntity {
 
     private Integer nvers;
 
-
-    public NameEntity() {
-    }
-
-    public NameEntity(NameEntity name) {
-        this.name = name.getName();
-        this.abbr = name.getAbbr();
-        this.nvers = name.getNvers();
-    }
-
     public String getName() {
         return name;
     }

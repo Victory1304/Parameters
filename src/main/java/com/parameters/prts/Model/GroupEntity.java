@@ -14,14 +14,6 @@ public class GroupEntity extends BaseEntity {
 
 //    private TypeEntity type;
 
-
-    public GroupEntity() {
-    }
-
-    public GroupEntity(GroupEntity group) {
-        this.title = group.getTitle();
-    }
-
     public String getTitle() {
         return title;
     }

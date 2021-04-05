@@ -13,13 +13,6 @@ public class SecondaryEntity extends BaseEntity {
 
 //    private Blob formula;
 
-    public SecondaryEntity() {
-    }
-
-    public SecondaryEntity(SecondaryEntity secondary) {
-        this.remark = secondary.getRemark();
-    }
-
     public String getRemark() {
         return remark;
     }

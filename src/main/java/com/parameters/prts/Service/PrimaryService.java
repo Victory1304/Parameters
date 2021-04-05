@@ -3,34 +3,18 @@ package com.parameters.prts.Service;
 import com.parameters.prts.Model.PrimaryEntity;
 import com.parameters.prts.Repository.PrimaryRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import org.vaadin.artur.helpers.CrudService;
 
 @Service
-public class PrimaryService {
+public class PrimaryService extends CrudService<PrimaryEntity, Integer> {
     private final PrimaryRepository primaryRepository;
 
     public PrimaryService(PrimaryRepository primaryRepository) {
         this.primaryRepository = primaryRepository;
     }
 
-    public List<PrimaryEntity> findAll() {
-        return primaryRepository.findAll();
-    }
-
-    public Optional<PrimaryEntity> findById(Long id) {
-        return primaryRepository.findById(id);
-    }
-
-    public PrimaryEntity save(PrimaryEntity primary) {
-        if (primary.getId() != null && primary.getId() > 0) {
-            return primaryRepository.save(primary);
-        }
-        return primaryRepository.save(new PrimaryEntity(primary));
-    }
-
-    public void delete(Long id) {
-        primaryRepository.deleteById(id);
+    @Override
+    protected PrimaryRepository getRepository() {
+        return primaryRepository;
     }
 }

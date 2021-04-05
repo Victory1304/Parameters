@@ -10,13 +10,6 @@ public class TypeEntity extends BaseEntity {
     @Column(name = "name_tp")
     private String nameTp;
 
-    public TypeEntity() {
-    }
-
-    public TypeEntity(TypeEntity type) {
-        this.nameTp = type.getNameTp();
-    }
-
     public String getNameTp() {
         return nameTp;
     }

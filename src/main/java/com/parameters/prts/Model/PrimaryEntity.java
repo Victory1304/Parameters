@@ -10,13 +10,6 @@ public class PrimaryEntity extends BaseEntity {
     @Column(name = "metod_izmrn")
     private String measurementMethod;
 
-    public PrimaryEntity() {
-    }
-
-    public PrimaryEntity(PrimaryEntity primary) {
-        this.measurementMethod = primary.getMeasurementMethod();
-    }
-
     public String getMeasurementMethod() {
         return measurementMethod;
     }
