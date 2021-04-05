@@ -66,7 +66,6 @@ public class ParameterView extends Div {
         grid.addColumn(ParameterEntity::getOpisanieFP).setHeader("Описание ФП").setAutoWidth(true);
         grid.addColumn(ParameterEntity::getRefer).setHeader("Ссылка").setAutoWidth(true);
 
-
         grid.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();

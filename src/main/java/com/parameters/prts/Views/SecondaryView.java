@@ -22,6 +22,5 @@ public class SecondaryView extends VerticalLayout {
         addClassName("secondary-view.css");
 
         add(grid);
-        grid.setItems(secondaryService.findAll());
     }
 }

@@ -22,6 +22,5 @@ public class TypeView extends VerticalLayout {
         addClassName("type-view.css");
 
         add(grid);
-        grid.setItems(typeService.findAll());
     }
 }

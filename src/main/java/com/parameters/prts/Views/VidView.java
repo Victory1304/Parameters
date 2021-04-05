@@ -22,6 +22,5 @@ public class VidView extends VerticalLayout {
         addClassName("vid-view.css");
 
         add(grid);
-        grid.setItems(vidService.findAll());
     }
 }

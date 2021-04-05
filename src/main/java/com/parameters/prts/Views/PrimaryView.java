@@ -22,6 +22,5 @@ public class PrimaryView extends VerticalLayout {
         addClassName("primary-view.css");
 
         add(grid);
-        grid.setItems(primaryService.findAll());
     }
 }

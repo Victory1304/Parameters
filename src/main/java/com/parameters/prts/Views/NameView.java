@@ -22,6 +22,5 @@ public class NameView extends VerticalLayout {
         addClassName("name-view");
 
         add(grid);
-        grid.setItems(nameService.findAll());
     }
 }
