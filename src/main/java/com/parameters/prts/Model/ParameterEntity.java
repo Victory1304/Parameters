@@ -76,4 +76,12 @@ public class ParameterEntity extends BaseEntity {
     public void setRefer(String refer) {
         this.refer = refer;
     }
+
+    @Override
+    public String toString() {
+        return "Параметр (" +
+                "вид : " + vid +
+                ", название : " + nameFP +
+                ')';
+    }
 }
