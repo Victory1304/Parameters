@@ -1,0 +1,8 @@
+1. Скачать, открыть проект через идею https://www.youtube.com/watch?v=aBVOAnygcZw 00:00 - 02:00
+2. Создать базу, используя parameter_schema.sql
+3. Прописать название базы, имя пользователя, пароль
+В src/main/resources/application.properties
+4. Настройки проекта в идее:
+File -> Project structure -> Project settings -> Project: {Project SDK = 16, Project language level = 15}
+(там же есть опция скачать, если нужного нет)
+5. Run
