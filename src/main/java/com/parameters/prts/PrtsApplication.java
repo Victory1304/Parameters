@@ -9,7 +9,6 @@ public class PrtsApplication {
 
     public static void main(String[] args) {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(PrtsApplication.class, args));
-//        SpringApplication.run(PrtsApplication.class, args);
-        System.out.println("hi");
+        System.out.println("Application started");
     }
 }

@@ -1,13 +1,18 @@
 package com.parameters.prts.Views;
 
 import com.parameters.prts.Model.GroupEntity;
+import com.parameters.prts.Model.ParameterEntity;
+import com.parameters.prts.Model.TypeEntity;
 import com.parameters.prts.Service.GroupService;
+import com.parameters.prts.Service.ParameterService;
+import com.parameters.prts.Service.TypeService;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,10 +36,13 @@ import java.util.Optional;
 @CssImport("./views/group/group-view.css")
 public class GroupView extends VerticalLayout {
     private final GroupService groupService;
-
+    private final ParameterService parameterService;
+    private final TypeService typeService;
     private final Grid<GroupEntity> grid = new Grid<>(GroupEntity.class, false);
 
     private TextField title;
+    private ComboBox<ParameterEntity> parameter;
+    private ComboBox<TypeEntity> type;
 
     private Button cancel = new Button("Отмена");
     private Button save = new Button("Сохранить");
@@ -44,8 +52,10 @@ public class GroupView extends VerticalLayout {
 
     private GroupEntity group;
 
-    public GroupView(GroupService groupService) {
+    public GroupView(GroupService groupService, ParameterService parameterService, TypeService typeService) {
         this.groupService = groupService;
+        this.parameterService = parameterService;
+        this.typeService = typeService;
         addClassName("group-view");
 
         SplitLayout splitLayout = new SplitLayout();
@@ -55,6 +65,8 @@ public class GroupView extends VerticalLayout {
         add(splitLayout);
 
         grid.addColumn(GroupEntity::getTitle).setHeader("Название").setAutoWidth(true);
+        grid.addColumn(GroupEntity::getParameter).setHeader("Параметр").setAutoWidth(true);
+        grid.addColumn(GroupEntity::getType).setHeader("Тип").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.groupService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -121,7 +133,11 @@ public class GroupView extends VerticalLayout {
 
         FormLayout formLayout = new FormLayout();
         title = new TextField("Название");
-        Component[] fields = new Component[]{title};
+        parameter = new ComboBox<>("Параметр");
+        parameter.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
+        type = new ComboBox<>("Тип");
+        type.setDataProvider(new CrudServiceDataProvider<>(this.typeService));
+        Component[] fields = new Component[]{title, parameter, type};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");

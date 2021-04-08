@@ -17,9 +17,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.PropertyId;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -34,7 +33,7 @@ public class PrimaryView extends VerticalLayout {
     private final PrimaryService primaryService;
     private final Grid<PrimaryEntity> grid = new Grid<>(PrimaryEntity.class, false);
 
-    private TextField measurementMethod;
+    private TextArea measurementMethod;
 
     private Button cancel = new Button("Отмена");
     private Button save = new Button("Сохранить");
@@ -120,7 +119,7 @@ public class PrimaryView extends VerticalLayout {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        measurementMethod = new TextField("Методика измерения");
+        measurementMethod = new TextArea("Методика измерения");
         Component[] fields = new Component[]{ measurementMethod };
 
         for (Component field : fields) {

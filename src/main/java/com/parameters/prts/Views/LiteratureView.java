@@ -1,13 +1,16 @@
 package com.parameters.prts.Views;
 
 import com.parameters.prts.Model.LiteratureEntity;
+import com.parameters.prts.Model.ParameterEntity;
 import com.parameters.prts.Service.LiteratureService;
+import com.parameters.prts.Service.ParameterService;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,10 +34,12 @@ import java.util.Optional;
 @CssImport("./views/literature/literature-view.css")
 public class LiteratureView extends VerticalLayout {
     private final LiteratureService literatureService;
+    private final ParameterService parameterService;
     private final Grid<LiteratureEntity> grid = new Grid<>(LiteratureEntity.class, false);
 
     private TextField site;
     private TextField title;
+    private ComboBox<ParameterEntity> parameter;
 
     private Button cancel = new Button("Отмена");
     private Button save = new Button("Сохранить");
@@ -44,8 +49,9 @@ public class LiteratureView extends VerticalLayout {
 
     private LiteratureEntity literature;
 
-    public LiteratureView(LiteratureService literatureService) {
+    public LiteratureView(LiteratureService literatureService, ParameterService parameterService) {
         this.literatureService = literatureService;
+        this.parameterService = parameterService;
         addClassName("literature-view");
 
         SplitLayout splitLayout = new SplitLayout();
@@ -56,6 +62,7 @@ public class LiteratureView extends VerticalLayout {
 
         grid.addColumn(LiteratureEntity::getTitle).setHeader("Название").setAutoWidth(true);
         grid.addColumn(LiteratureEntity::getSite).setHeader("Сайт").setAutoWidth(true);
+        grid.addColumn(LiteratureEntity::getParameter).setHeader("Параметр").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.literatureService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -123,7 +130,9 @@ public class LiteratureView extends VerticalLayout {
         FormLayout formLayout = new FormLayout();
         title = new TextField("Название");
         site = new TextField("Сайт");
-        Component[] fields = new Component[]{title, site};
+        parameter = new ComboBox<>("Параметр");
+        parameter.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
+        Component[] fields = new Component[]{title, site, parameter};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");
