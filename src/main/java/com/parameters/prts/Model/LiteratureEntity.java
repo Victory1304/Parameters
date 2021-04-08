@@ -2,6 +2,8 @@ package com.parameters.prts.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,9 +16,9 @@ public class LiteratureEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-//    @ManyToOne
-//    @JoinColumn(name = "prts")
-//    private ParameterEntity prts;
+    @ManyToOne
+    @JoinColumn(name = "prts_id")
+    private ParameterEntity parameter;
 
     public String getSite() {
         return site;
@@ -34,11 +36,18 @@ public class LiteratureEntity extends BaseEntity {
         this.title = title;
     }
 
-    //    public ParameterEntity getPrts() {
-//        return prts;
-//    }
-//
-//    public void setPrts(ParameterEntity prts) {
-//        this.prts = prts;
-//    }
+    public ParameterEntity getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(ParameterEntity parameter) {
+        this.parameter = parameter;
+    }
+
+    @Override
+    public String toString() {
+        return "Литература (" +
+                "название : " + title +
+                ')';
+    }
 }

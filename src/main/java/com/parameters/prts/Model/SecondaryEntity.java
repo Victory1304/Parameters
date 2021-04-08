@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "vtr_prt")
+@Table(name = "vtr_prts")
 public class SecondaryEntity extends BaseEntity {
 
     @Column(name = "prim")
@@ -19,5 +19,13 @@ public class SecondaryEntity extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "Вторичный ("
+                + "id : " + id
+                + "формула : "
+                + "?" + ')';
     }
 }

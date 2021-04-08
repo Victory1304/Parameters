@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "prv_prt")
+@Table(name = "prv_prts")
 public class PrimaryEntity extends BaseEntity {
     @Column(name = "metod_izmrn")
     private String measurementMethod;
@@ -16,5 +16,13 @@ public class PrimaryEntity extends BaseEntity {
 
     public void setMeasurementMethod(String measurementMethod) {
         this.measurementMethod = measurementMethod;
+    }
+
+    @Override
+    public String toString() {
+        return "Первичный : ("
+                + " id : " + id
+                + " методика : " + measurementMethod
+                + ')';
     }
 }

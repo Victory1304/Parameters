@@ -2,7 +2,11 @@ package com.parameters.prts.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "prts")
@@ -26,8 +30,17 @@ public class ParameterEntity extends BaseEntity {
     @Column(name = "refer")
     private String refer;
 
-    public ParameterEntity() {
-    }
+    @OneToMany(mappedBy = "parameter")
+    private final Set<LiteratureEntity> literatures = new HashSet<>();
+
+    @OneToMany(mappedBy = "parameter")
+    private final Set<NameEntity> names = new HashSet<>();
+
+    @OneToOne(mappedBy = "parameter")
+    private VidEntity vidEntity;
+
+    @OneToMany(mappedBy = "parameter")
+    private final Set<GroupEntity> groups = new HashSet<>();
 
     public String getVid() {
         return vid;
@@ -75,6 +88,26 @@ public class ParameterEntity extends BaseEntity {
 
     public void setRefer(String refer) {
         this.refer = refer;
+    }
+
+    public Set<LiteratureEntity> getLiteratures() {
+        return literatures;
+    }
+
+    public Set<NameEntity> getNames() {
+        return names;
+    }
+
+    public VidEntity getVidEntity() {
+        return vidEntity;
+    }
+
+    public void setVidEntity(VidEntity vidEntity) {
+        this.vidEntity = vidEntity;
+    }
+
+    public Set<GroupEntity> getGroups() {
+        return groups;
     }
 
     @Override
