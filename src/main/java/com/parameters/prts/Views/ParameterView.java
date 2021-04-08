@@ -1,5 +1,7 @@
 package com.parameters.prts.Views;
 
+import com.parameters.prts.Model.GroupEntity;
+import com.parameters.prts.Service.GroupService;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
 import com.parameters.prts.Model.ParameterEntity;
@@ -8,6 +10,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,6 +34,7 @@ import java.util.Optional;
 @CssImport("./views/parameter/parameter-view.css")
 public class ParameterView extends Div {
     private final ParameterService parameterService;
+    private final GroupService groupService;
 
     private final Grid<ParameterEntity> grid = new Grid<>(ParameterEntity.class, false);
 
@@ -40,6 +44,7 @@ public class ParameterView extends Div {
     private TextField oblastPrimenen;
     private TextField nameFp;
     private TextField refer;
+    private ComboBox<GroupEntity> group;
 
     private Button cancel = new Button("Отмена");
     private Button save = new Button("Сохранить");
@@ -49,8 +54,9 @@ public class ParameterView extends Div {
 
     private ParameterEntity parameter;
 
-    public ParameterView(ParameterService parameterService) {
+    public ParameterView(ParameterService parameterService, GroupService groupService) {
         this.parameterService = parameterService;
+        this.groupService = groupService;
         addClassName("parameter-view");
 
         SplitLayout splitLayout = new SplitLayout();
@@ -65,6 +71,7 @@ public class ParameterView extends Div {
         grid.addColumn(ParameterEntity::getNameFP).setHeader("Название ФП").setAutoWidth(true);
         grid.addColumn(ParameterEntity::getOpisanieFP).setHeader("Описание ФП").setAutoWidth(true);
         grid.addColumn(ParameterEntity::getRefer).setHeader("Ссылка").setAutoWidth(true);
+        grid.addColumn(ParameterEntity::getGroup).setHeader("Группа").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -136,7 +143,9 @@ public class ParameterView extends Div {
         nameFp = new TextField("Название ФП");
         opisanieFp = new TextField("Описание ФП");
         refer = new TextField("Ссылка");
-        Component[] fields = new Component[]{vid, edinIzmeren, oblastPrimenen, nameFp, opisanieFp, refer};
+        group = new ComboBox<>("Группа");
+        group.setDataProvider(new CrudServiceDataProvider<>(this.groupService));
+        Component[] fields = new Component[]{vid, edinIzmeren, oblastPrimenen, nameFp, opisanieFp, refer, group};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");

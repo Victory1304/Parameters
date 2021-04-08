@@ -2,6 +2,8 @@ package com.parameters.prts.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,8 +41,9 @@ public class ParameterEntity extends BaseEntity {
     @OneToOne(mappedBy = "parameter")
     private VidEntity vidEntity;
 
-    @OneToMany(mappedBy = "parameter")
-    private final Set<GroupEntity> groups = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private GroupEntity group;
 
     public String getVid() {
         return vid;
@@ -106,8 +109,12 @@ public class ParameterEntity extends BaseEntity {
         this.vidEntity = vidEntity;
     }
 
-    public Set<GroupEntity> getGroups() {
-        return groups;
+    public GroupEntity getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupEntity group) {
+        this.group = group;
     }
 
     @Override

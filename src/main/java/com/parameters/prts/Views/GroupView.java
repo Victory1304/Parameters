@@ -36,12 +36,10 @@ import java.util.Optional;
 @CssImport("./views/group/group-view.css")
 public class GroupView extends VerticalLayout {
     private final GroupService groupService;
-    private final ParameterService parameterService;
     private final TypeService typeService;
     private final Grid<GroupEntity> grid = new Grid<>(GroupEntity.class, false);
 
     private TextField title;
-    private ComboBox<ParameterEntity> parameter;
     private ComboBox<TypeEntity> type;
 
     private Button cancel = new Button("Отмена");
@@ -52,9 +50,8 @@ public class GroupView extends VerticalLayout {
 
     private GroupEntity group;
 
-    public GroupView(GroupService groupService, ParameterService parameterService, TypeService typeService) {
+    public GroupView(GroupService groupService, TypeService typeService) {
         this.groupService = groupService;
-        this.parameterService = parameterService;
         this.typeService = typeService;
         addClassName("group-view");
 
@@ -65,7 +62,6 @@ public class GroupView extends VerticalLayout {
         add(splitLayout);
 
         grid.addColumn(GroupEntity::getTitle).setHeader("Название").setAutoWidth(true);
-        grid.addColumn(GroupEntity::getParameter).setHeader("Параметр").setAutoWidth(true);
         grid.addColumn(GroupEntity::getType).setHeader("Тип").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.groupService));
@@ -133,11 +129,9 @@ public class GroupView extends VerticalLayout {
 
         FormLayout formLayout = new FormLayout();
         title = new TextField("Название");
-        parameter = new ComboBox<>("Параметр");
-        parameter.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
         type = new ComboBox<>("Тип");
         type.setDataProvider(new CrudServiceDataProvider<>(this.typeService));
-        Component[] fields = new Component[]{title, parameter, type};
+        Component[] fields = new Component[]{title, type};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");

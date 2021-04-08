@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "param_group")
@@ -12,9 +15,8 @@ public class GroupEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "prts_id")
-    private ParameterEntity parameter;
+    @OneToMany(mappedBy = "group")
+    private final Set<ParameterEntity> parameters = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "type_prts_id")
@@ -28,12 +30,8 @@ public class GroupEntity extends BaseEntity {
         this.title = title;
     }
 
-    public ParameterEntity getParameter() {
-        return parameter;
-    }
-
-    public void setParameter(ParameterEntity parameter) {
-        this.parameter = parameter;
+    public Set<ParameterEntity> getParameters() {
+        return parameters;
     }
 
     public TypeEntity getType() {
