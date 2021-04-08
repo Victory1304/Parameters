@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `literature`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `literature` (
-                              `id` int NOT NULL AUTO_INCREMENT,
-                              `site` text,
-                              `title` text,
-                              `prts_id` int DEFAULT NULL,
-                              PRIMARY KEY (`id`),
-                              KEY `fk_literature_prts` (`prts_id`),
-                              CONSTRAINT `fk_literature_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `site` text,
+  `title` text,
+  `prts_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_literature_prts` (`prts_id`),
+  CONSTRAINT `fk_literature_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,14 +51,14 @@ DROP TABLE IF EXISTS `name_prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `name_prts` (
-                             `id` int NOT NULL AUTO_INCREMENT,
-                             `name_altr` varchar(45) DEFAULT NULL,
-                             `abbr_altr` varchar(45) DEFAULT NULL,
-                             `nvers` int DEFAULT NULL,
-                             `prts_id` int NOT NULL,
-                             PRIMARY KEY (`id`),
-                             KEY `fk_name_prts` (`prts_id`),
-                             CONSTRAINT `fk_name_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name_altr` varchar(45) DEFAULT NULL,
+  `abbr_altr` varchar(45) DEFAULT NULL,
+  `nvers` int DEFAULT NULL,
+  `prts_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_name_prts` (`prts_id`),
+  CONSTRAINT `fk_name_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -80,15 +80,12 @@ DROP TABLE IF EXISTS `param_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `param_group` (
-                               `id` int NOT NULL AUTO_INCREMENT,
-                               `title` varchar(100) DEFAULT NULL,
-                               `prts_id` int DEFAULT NULL,
-                               `type_prts_id` int DEFAULT NULL,
-                               PRIMARY KEY (`id`),
-                               KEY `fk_group_type` (`type_prts_id`),
-                               KEY `fk_group_prts` (`prts_id`),
-                               CONSTRAINT `fk_group_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`),
-                               CONSTRAINT `fk_group_type` FOREIGN KEY (`type_prts_id`) REFERENCES `type_prts` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) DEFAULT NULL,
+  `type_prts_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_group_type` (`type_prts_id`),
+  CONSTRAINT `fk_group_type` FOREIGN KEY (`type_prts_id`) REFERENCES `type_prts` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -98,7 +95,7 @@ CREATE TABLE `param_group` (
 
 LOCK TABLES `param_group` WRITE;
 /*!40000 ALTER TABLE `param_group` DISABLE KEYS */;
-INSERT INTO `param_group` VALUES (20,'Сердечно-сосудистая система',2,2),(21,'Дыхательная система',NULL,1),(22,'Костно- мышечная система',NULL,1),(23,'Нервная система',NULL,1),(24,'Эндокринная система',NULL,1);
+INSERT INTO `param_group` VALUES (20,'Сердечно-сосудистая система',2),(21,'Дыхательная система',1),(22,'Костно- мышечная система',1),(23,'Нервная система',1),(24,'Эндокринная система',1);
 /*!40000 ALTER TABLE `param_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,14 +107,17 @@ DROP TABLE IF EXISTS `prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `prts` (
-                        `id` int NOT NULL AUTO_INCREMENT,
-                        `vid` varchar(45) DEFAULT NULL,
-                        `edinizmeren` varchar(45) DEFAULT NULL,
-                        `opisaniefp` text,
-                        `oblastprimenen` text,
-                        `namefp` varchar(45) DEFAULT NULL,
-                        `refer` varchar(45) DEFAULT NULL,
-                        PRIMARY KEY (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `vid` varchar(45) DEFAULT NULL,
+  `edinizmeren` varchar(45) DEFAULT NULL,
+  `opisaniefp` text,
+  `oblastprimenen` text,
+  `namefp` varchar(45) DEFAULT NULL,
+  `refer` varchar(45) DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_prts_group` (`group_id`),
+  CONSTRAINT `fk_prts_group` FOREIGN KEY (`group_id`) REFERENCES `param_group` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,7 +127,7 @@ CREATE TABLE `prts` (
 
 LOCK TABLES `prts` WRITE;
 /*!40000 ALTER TABLE `prts` DISABLE KEYS */;
-INSERT INTO `prts` VALUES (1,'vid1','edin','opis','oblast','name','refer'),(2,'vid2','edin2','opis2','oblast2','name2','refer2'),(3,'vid3','edin','opis','oblast','name','refer'),(4,'vid4','edin','opis','oblast','name','refer'),(6,'Вид','Единица','Описание','Область','Название','Ссылка');
+INSERT INTO `prts` VALUES (1,'vid1','edin','opis','oblast','name','refer',20),(2,'vid2','edin2','opis2','oblast2','name2','refer2',NULL),(3,'vid3','edin','opis','oblast','name','refer',NULL),(4,'vid4','edin','opis','oblast','name','refer',NULL),(6,'Вид','Единица','Описание','Область','Название','Ссылка',21);
 /*!40000 ALTER TABLE `prts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,9 +139,9 @@ DROP TABLE IF EXISTS `prv_prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `prv_prts` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `metod_izmrn` text,
-                            PRIMARY KEY (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `metod_izmrn` text,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -163,9 +163,9 @@ DROP TABLE IF EXISTS `type_prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `type_prts` (
-                             `id` int NOT NULL AUTO_INCREMENT,
-                             `name_tp` varchar(45) DEFAULT NULL,
-                             PRIMARY KEY (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name_tp` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,17 +187,17 @@ DROP TABLE IF EXISTS `vid_prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vid_prts` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `prv_prts_id` int DEFAULT NULL,
-                            `vtr_prts_id` int DEFAULT NULL,
-                            `prts_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            KEY `fk_vid_prts` (`prts_id`),
-                            KEY `fk_vid_vtr_prts` (`vtr_prts_id`),
-                            KEY `fk_vid_prv_prts` (`prv_prts_id`),
-                            CONSTRAINT `fk_vid_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`),
-                            CONSTRAINT `fk_vid_prv_prts` FOREIGN KEY (`prv_prts_id`) REFERENCES `prv_prts` (`id`),
-                            CONSTRAINT `fk_vid_vtr_prts` FOREIGN KEY (`vtr_prts_id`) REFERENCES `vtr_prts` (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `prv_prts_id` int DEFAULT NULL,
+  `vtr_prts_id` int DEFAULT NULL,
+  `prts_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_vid_prts` (`prts_id`),
+  KEY `fk_vid_vtr_prts` (`vtr_prts_id`),
+  KEY `fk_vid_prv_prts` (`prv_prts_id`),
+  CONSTRAINT `fk_vid_prts` FOREIGN KEY (`prts_id`) REFERENCES `prts` (`id`),
+  CONSTRAINT `fk_vid_prv_prts` FOREIGN KEY (`prv_prts_id`) REFERENCES `prv_prts` (`id`),
+  CONSTRAINT `fk_vid_vtr_prts` FOREIGN KEY (`vtr_prts_id`) REFERENCES `vtr_prts` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -219,10 +219,10 @@ DROP TABLE IF EXISTS `vtr_prts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vtr_prts` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `formula` blob,
-                            `prim` text,
-                            PRIMARY KEY (`id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `formula` blob,
+  `prim` text,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -245,4 +245,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-08  3:04:17
+-- Dump completed on 2021-04-09  0:07:45
