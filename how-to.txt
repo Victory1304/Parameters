@@ -1,8 +1,20 @@
-1. Скачать, открыть проект через идею https://www.youtube.com/watch?v=aBVOAnygcZw 00:00 - 02:00
-2. Создать базу, используя parameter_schema.sql
-3. Прописать название базы, имя пользователя, пароль
-В src/main/resources/application.properties
-4. Настройки проекта в идее:
-File -> Project structure -> Project settings -> Project: {Project SDK = 16, Project language level = 15}
-(там же есть опция скачать, если нужного нет)
-5. Run
+Для работы понадобится MySQL Workbench и IntelliJ IDEA Community Edition (2020.3), браузер 
+1.	Открыть проект через IDEA: в github нажать кнопку “code” и скопировать HTTP адрес
+В IDEA выполняем следующие действия: File -> New-> project from version control. Появляется окно, в котором в поле URL вставляем скопированные данные. В поле Directory выбираем, куда сохранить наш проект.
+Примечание: в «пути» не должно быть русских букв
+
+2.	Нужно выгрузить sql файл: открываем  MySQL Workbench (обязательно запомнить пароль для своего user:root» Переходим в mysql Conector, создаем sqlfile. Затем необходимо выгрузить с github, нужный файл. 
+Server-> Data Import -> Выбираем Import from Self-Contrained File-> выбираем нашу схему из папки(  файл с типом SQL Text File) -> В поле Default Target Schema  выбираем наименование -> Import Progress -> start Import
+3.	Прописать название базы , имя пользователя, пароль в В src/main/resources/application.properties
+Пример
+spring.datasource.url=jdbc:mysql://localhost:3306/newschema
+spring.datasource.username=root
+spring.datasource.password=123456
+
+newschema- совпадает с введенной информацией в Default Target Schema  
+4.	Для корректной работы нужно настроить данные в IDEA:
+-	File -> Project structure -> Project settings -> Project: {Project SDK = 16, Project language level = 15} (там же есть опция скачать, если нужного нет)
+-	сверху справа Add configuration -> нажимаем «+»  -> Выбираем Maven -> в command line вставляем «clean spring-boot:run» -> ok 
+
+5.	Run (зеленая стрелка возле конфигурации)
+
