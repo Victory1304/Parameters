@@ -78,14 +78,22 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Параметры", ParameterView.class),
+        return new Tab[]{
                 createTab("Литература", LiteratureView.class),
-                createTab("Группы", GroupView.class),
-                createTab("Наименования", NameView.class),
                 createTab("Типы", TypeView.class),
-                createTab("Виды", VidView.class),
-                createTab("Первичные", PrimaryView.class),
-                createTab("Вторичные", SecondaryView.class)
+                createTab("Системы", SystemView.class),
+                createTab("Источники", SourceView.class),
+                createTab("Группы", GroupSystemView.class),
+                createTab("Языки", LanguageView.class),
+                createTab("Формулы", FormulaView.class),
+                createTab("Методы", MethodView.class),
+                createTab("Индикаторы", BasicNameIndicatorView.class),
+                createTab("Дополнительные название", AdditionalNameView.class),
+                createTab("Индикаторы формул", BasicFormulaView.class),
+                createTab("Оборудование методов", MethodEquipmentView.class),
+                createTab("Литература названий", LiteratureNamesView.class),
+                createTab("Индикаторы методов", BasicMethodView.class),
+                createTab("Оборудование", EquipmentView.class)
         };
     }
 

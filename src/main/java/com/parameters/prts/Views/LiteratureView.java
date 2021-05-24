@@ -1,24 +1,19 @@
 package com.parameters.prts.Views;
 
+import com.parameters.prts.Model.BaseEntity;
 import com.parameters.prts.Model.LiteratureEntity;
-import com.parameters.prts.Model.ParameterEntity;
 import com.parameters.prts.Service.LiteratureService;
-import com.parameters.prts.Service.ParameterService;
+import com.parameters.prts.Views.components.CommonEntityLayout;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasStyle;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -32,37 +27,33 @@ import java.util.Optional;
 @Route(value = "literature", layout = MainView.class)
 @PageTitle("Литература")
 @CssImport("./views/literature/literature-view.css")
-public class LiteratureView extends VerticalLayout {
+public class LiteratureView extends CommonEntityLayout {
+    private final static String ITEM_SAVED = "Литература сохранена";
+    private final static String ITEM_SAVE_FAIL = "Не удалось сохранить";
+    private final static String ITEM_DELETION = "Удаление объекта";
+    private final static String ITEM_DELETION_CONFIRMATION = "Вы действительно хотите удалить объект ";
+    private final static String ITEM_DELETED = "Литература удалена";
+
     private final LiteratureService literatureService;
-    private final ParameterService parameterService;
     private final Grid<LiteratureEntity> grid = new Grid<>(LiteratureEntity.class, false);
 
-    private TextField site;
+    private TextField website;
     private TextField title;
-    private ComboBox<ParameterEntity> parameter;
 
-    private Button cancel = new Button("Отмена");
-    private Button save = new Button("Сохранить");
-    private Button delete = new Button("Удалить");
+    private LiteratureEntity literatureEntity;
 
-    private BeanValidationBinder<LiteratureEntity> binder;
-
-    private LiteratureEntity literature;
-
-    public LiteratureView(LiteratureService literatureService, ParameterService parameterService) {
+    public LiteratureView(LiteratureService literatureService) {
         this.literatureService = literatureService;
-        this.parameterService = parameterService;
         addClassName("literature-view");
 
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
-        createGridLayout(splitLayout);
+        createGridLayout(splitLayout, grid);
         createEditorLayout(splitLayout);
         add(splitLayout);
 
         grid.addColumn(LiteratureEntity::getTitle).setHeader("Название").setAutoWidth(true);
-        grid.addColumn(LiteratureEntity::getSite).setHeader("Сайт").setAutoWidth(true);
-        grid.addColumn(LiteratureEntity::getParameter).setHeader("Параметр").setAutoWidth(true);
+        grid.addColumn(LiteratureEntity::getWebsite).setHeader("Ссылка").setAutoWidth(true);
 
         grid.setDataProvider(new CrudServiceDataProvider<>(this.literatureService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
@@ -74,52 +65,53 @@ public class LiteratureView extends VerticalLayout {
                 if (literatureFromBackend.isPresent()) {
                     populateForm(literatureFromBackend.get());
                 } else {
-                    refreshGrid();
+                    refreshGrid(grid);
                 }
             } else {
                 clearForm();
             }
         });
 
-        binder = new BeanValidationBinder<>(LiteratureEntity.class);
-        binder.bindInstanceFields(this);
+        setBinder(new BeanValidationBinder<>(LiteratureEntity.class));
+        getBinder().bindInstanceFields(this);
 
-        cancel.addClickListener(event -> {
+        getCancel().addClickListener(event -> {
             clearForm();
-            refreshGrid();
+            refreshGrid(grid);
         });
 
-        save.addClickListener(event -> {
+        getSave().addClickListener(event -> {
             try {
-                if (this.literature == null) {
-                    this.literature = new LiteratureEntity();
+                if (this.literatureEntity == null) {
+                    this.literatureEntity = new LiteratureEntity();
                 }
-                binder.writeBean(this.literature);
+                getBinder().writeBean(this.literatureEntity);
 
-                this.literatureService.update(this.literature);
+                this.literatureService.update(this.literatureEntity);
                 clearForm();
-                refreshGrid();
-                Notification.show("Литература сохранена");
+                refreshGrid(grid);
+                Notification.show(ITEM_SAVED);
             } catch (ValidationException validationException) {
-                Notification.show("Не удалось сохранить :(");
+                Notification.show(ITEM_SAVE_FAIL);
             }
         });
 
-        delete.addClickListener(event -> {
-            if (this.literature != null && this.literature.getId() != null) {
-                ConfirmationDialog confirmationDialog = new ConfirmationDialog("Удаление объекта",
-                        "Вы действительно хотите удалить объект " + this.literature.getTitle() + " ?", confirm -> {
-                    this.literatureService.delete(this.literature.getId());
+        getDelete().addClickListener(event -> {
+            if (this.literatureEntity != null && this.literatureEntity.getId() != null) {
+                ConfirmationDialog confirmationDialog = new ConfirmationDialog(ITEM_DELETION,
+                        ITEM_DELETION_CONFIRMATION + this.literatureEntity.getTitle() + " ?", confirm -> {
+                    this.literatureService.delete(this.literatureEntity.getId());
                     clearForm();
-                    refreshGrid();
-                    Notification.show("Литература удалена");
+                    refreshGrid(grid);
+                    Notification.show(ITEM_DELETED);
                 });
                 confirmationDialog.open();
             }
         });
     }
 
-    private void createEditorLayout(SplitLayout splitLayout) {
+    @Override
+    public void createEditorLayout(SplitLayout splitLayout) {
         Div editorLayoutDiv = new Div();
         editorLayoutDiv.setId("editor-layout");
 
@@ -128,11 +120,9 @@ public class LiteratureView extends VerticalLayout {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        title = new TextField("Название");
-        site = new TextField("Сайт");
-        parameter = new ComboBox<>("Параметр");
-        parameter.setDataProvider(new CrudServiceDataProvider<>(this.parameterService));
-        Component[] fields = new Component[]{title, site, parameter};
+        website = new TextField("Наименование");
+        title = new TextField("Аббревиатура");
+        Component[] fields = new Component[]{website, title};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");
@@ -144,37 +134,14 @@ public class LiteratureView extends VerticalLayout {
         splitLayout.addToSecondary(editorLayoutDiv);
     }
 
-    private void createButtonLayout(Div editorLayoutDiv) {
-        VerticalLayout buttonLayout = new VerticalLayout();
-        buttonLayout.setId("button-layout");
-        buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        buttonLayout.setSpacing(true);
-        save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        cancel.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        buttonLayout.add(save, delete, cancel);
-        editorLayoutDiv.add(buttonLayout);
+    @Override
+    public <T extends BaseEntity> void populateForm(T entity) {
+        this.literatureEntity = (LiteratureEntity) entity;
+        getBinder().readBean(this.literatureEntity);
     }
 
-    private void createGridLayout(SplitLayout splitLayout) {
-        Div wrapper = new Div();
-        wrapper.setId("grid-wrapper");
-        wrapper.setWidthFull();
-        splitLayout.addToPrimary(wrapper);
-        wrapper.add(grid);
-    }
-
-    private void refreshGrid() {
-        grid.select(null);
-        grid.getDataProvider().refreshAll();
-    }
-
-    private void clearForm() {
-        populateForm(null);
-    }
-
-    private void populateForm(LiteratureEntity literatureEntity) {
-        this.literature = literatureEntity;
-        binder.readBean(this.literature);
+    @Override
+    public BeanValidationBinder<LiteratureEntity> getBinder() {
+        return ((BeanValidationBinder<LiteratureEntity>) super.getBinder());
     }
 }

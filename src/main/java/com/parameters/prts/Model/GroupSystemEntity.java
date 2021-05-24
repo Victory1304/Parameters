@@ -8,26 +8,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "type")
-public class TypeEntity extends BaseEntity {
+@Table(name = "group_systems")
+public class GroupSystemEntity extends BaseEntity {
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "groupSystem")
     private final Set<BasicNameIndicatorEntity> indicators = new HashSet<>();
 
     public String getName() {
         return name;
     }
 
-    public void setName(String nameTp) {
-        this.name = nameTp;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<BasicNameIndicatorEntity> getIndicators() {
+        return indicators;
     }
 
     @Override
     public String toString() {
-        return "Тип (" +
+        return "Группа (" +
                 "название : " + name +
                 ')';
     }

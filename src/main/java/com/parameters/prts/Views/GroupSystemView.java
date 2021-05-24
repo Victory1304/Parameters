@@ -1,8 +1,8 @@
 package com.parameters.prts.Views;
 
 import com.parameters.prts.Model.BaseEntity;
-import com.parameters.prts.Model.TypeEntity;
-import com.parameters.prts.Service.TypeService;
+import com.parameters.prts.Model.GroupSystemEntity;
+import com.parameters.prts.Service.GroupSystemService;
 import com.parameters.prts.Views.components.CommonEntityLayout;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
@@ -24,26 +24,26 @@ import org.vaadin.artur.helpers.CrudServiceDataProvider;
 
 import java.util.Optional;
 
-@Route(value = "type", layout = MainView.class)
-@PageTitle("Тип")
-@CssImport("./views/type/type-view.css")
-public class TypeView extends CommonEntityLayout {
-    private final static String ITEM_SAVED = "Тип сохранен";
+@Route(value = "groupSystem", layout = MainView.class)
+@PageTitle("Группы")
+@CssImport("./views/groupSystem/groupSystem-view.css")
+public class GroupSystemView extends CommonEntityLayout {
+    private final static String ITEM_SAVED = "Группа сохранена";
     private final static String ITEM_SAVE_FAIL = "Не удалось сохранить";
     private final static String ITEM_DELETION = "Удаление объекта";
     private final static String ITEM_DELETION_CONFIRMATION = "Вы действительно хотите удалить объект ";
-    private final static String ITEM_DELETED = "Тип удален";
+    private final static String ITEM_DELETED = "Группа удалена";
 
-    private final TypeService typeService;
-    private final Grid<TypeEntity> grid = new Grid<>(TypeEntity.class, false);
+    private final GroupSystemService groupSystemService;
+    private final Grid<GroupSystemEntity> grid = new Grid<>(GroupSystemEntity.class, false);
 
     private TextField name;
 
-    private TypeEntity typeEntity;
+    private GroupSystemEntity groupSystemEntity;
 
-    public TypeView(TypeService typeService) {
-        this.typeService = typeService;
-        addClassName("type-view");
+    public GroupSystemView(GroupSystemService groupSystemService) {
+        this.groupSystemService = groupSystemService;
+        addClassName("groupSystem-view");
 
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
@@ -51,17 +51,17 @@ public class TypeView extends CommonEntityLayout {
         createEditorLayout(splitLayout);
         add(splitLayout);
 
-        grid.addColumn(TypeEntity::getName).setHeader("Название").setAutoWidth(true);
+        grid.addColumn(GroupSystemEntity::getName).setHeader("Название").setAutoWidth(true);
 
-        grid.setDataProvider(new CrudServiceDataProvider<>(this.typeService));
+        grid.setDataProvider(new CrudServiceDataProvider<>(this.groupSystemService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
 
         grid.asSingleSelect().addValueChangeListener(event -> {
             if (event.getValue() != null) {
-                Optional<TypeEntity> typeFromBackend = this.typeService.get(event.getValue().getId());
-                if (typeFromBackend.isPresent()) {
-                    populateForm(typeFromBackend.get());
+                Optional<GroupSystemEntity> groupSystemFromBackend = this.groupSystemService.get(event.getValue().getId());
+                if (groupSystemFromBackend.isPresent()) {
+                    populateForm(groupSystemFromBackend.get());
                 } else {
                     refreshGrid(grid);
                 }
@@ -70,7 +70,7 @@ public class TypeView extends CommonEntityLayout {
             }
         });
 
-        setBinder(new BeanValidationBinder<>(TypeEntity.class));
+        setBinder(new BeanValidationBinder<>(GroupSystemEntity.class));
         getBinder().bindInstanceFields(this);
 
         getCancel().addClickListener(event -> {
@@ -80,12 +80,12 @@ public class TypeView extends CommonEntityLayout {
 
         getSave().addClickListener(event -> {
             try {
-                if (this.typeEntity == null) {
-                    this.typeEntity = new TypeEntity();
+                if (this.groupSystemEntity == null) {
+                    this.groupSystemEntity = new GroupSystemEntity();
                 }
-                getBinder().writeBean(this.typeEntity);
+                getBinder().writeBean(this.groupSystemEntity);
 
-                this.typeService.update(this.typeEntity);
+                this.groupSystemService.update(this.groupSystemEntity);
                 clearForm();
                 refreshGrid(grid);
                 Notification.show(ITEM_SAVED);
@@ -95,10 +95,10 @@ public class TypeView extends CommonEntityLayout {
         });
 
         getDelete().addClickListener(event -> {
-            if (this.typeEntity != null && this.typeEntity.getId() != null) {
+            if (this.groupSystemEntity != null && this.groupSystemEntity.getId() != null) {
                 ConfirmationDialog confirmationDialog = new ConfirmationDialog(ITEM_DELETION,
-                        ITEM_DELETION_CONFIRMATION + this.typeEntity.getName() + " ?", confirm -> {
-                    this.typeService.delete(this.typeEntity.getId());
+                        ITEM_DELETION_CONFIRMATION + this.groupSystemEntity.getName() + " ?", confirm -> {
+                    this.groupSystemService.delete(this.groupSystemEntity.getId());
                     clearForm();
                     refreshGrid(grid);
                     Notification.show(ITEM_DELETED);
@@ -133,12 +133,13 @@ public class TypeView extends CommonEntityLayout {
 
     @Override
     public <T extends BaseEntity> void populateForm(T entity) {
-        this.typeEntity = (TypeEntity) entity;
-        getBinder().readBean(this.typeEntity);
+        this.groupSystemEntity = (GroupSystemEntity) entity;
+        getBinder().readBean(this.groupSystemEntity);
     }
 
     @Override
-    public BeanValidationBinder<TypeEntity> getBinder() {
-        return ((BeanValidationBinder<TypeEntity>) super.getBinder());
+    public BeanValidationBinder<GroupSystemEntity> getBinder() {
+        return ((BeanValidationBinder<GroupSystemEntity>) super.getBinder());
     }
 }
+

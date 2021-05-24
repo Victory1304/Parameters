@@ -1,8 +1,8 @@
 package com.parameters.prts.Views;
 
 import com.parameters.prts.Model.BaseEntity;
-import com.parameters.prts.Model.TypeEntity;
-import com.parameters.prts.Service.TypeService;
+import com.parameters.prts.Model.LanguageEntity;
+import com.parameters.prts.Service.LanguageService;
 import com.parameters.prts.Views.components.CommonEntityLayout;
 import com.parameters.prts.Views.components.ConfirmationDialog;
 import com.parameters.prts.Views.main.MainView;
@@ -24,26 +24,26 @@ import org.vaadin.artur.helpers.CrudServiceDataProvider;
 
 import java.util.Optional;
 
-@Route(value = "type", layout = MainView.class)
-@PageTitle("Тип")
-@CssImport("./views/type/type-view.css")
-public class TypeView extends CommonEntityLayout {
-    private final static String ITEM_SAVED = "Тип сохранен";
+@Route(value = "language", layout = MainView.class)
+@PageTitle("Оборудование")
+@CssImport("./views/language/language-view.css")
+public class LanguageView extends CommonEntityLayout {
+    private final static String ITEM_SAVED = "Язык сохранён";
     private final static String ITEM_SAVE_FAIL = "Не удалось сохранить";
     private final static String ITEM_DELETION = "Удаление объекта";
     private final static String ITEM_DELETION_CONFIRMATION = "Вы действительно хотите удалить объект ";
-    private final static String ITEM_DELETED = "Тип удален";
+    private final static String ITEM_DELETED = "Язык удалён";
 
-    private final TypeService typeService;
-    private final Grid<TypeEntity> grid = new Grid<>(TypeEntity.class, false);
+    private final LanguageService languageService;
+    private final Grid<LanguageEntity> grid = new Grid<>(LanguageEntity.class, false);
 
     private TextField name;
 
-    private TypeEntity typeEntity;
+    private LanguageEntity languageEntity;
 
-    public TypeView(TypeService typeService) {
-        this.typeService = typeService;
-        addClassName("type-view");
+    public LanguageView(LanguageService languageService) {
+        this.languageService = languageService;
+        addClassName("language-view");
 
         SplitLayout splitLayout = new SplitLayout();
         splitLayout.setSizeFull();
@@ -51,17 +51,17 @@ public class TypeView extends CommonEntityLayout {
         createEditorLayout(splitLayout);
         add(splitLayout);
 
-        grid.addColumn(TypeEntity::getName).setHeader("Название").setAutoWidth(true);
+        grid.addColumn(LanguageEntity::getName).setHeader("Название").setAutoWidth(true);
 
-        grid.setDataProvider(new CrudServiceDataProvider<>(this.typeService));
+        grid.setDataProvider(new CrudServiceDataProvider<>(this.languageService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
 
         grid.asSingleSelect().addValueChangeListener(event -> {
             if (event.getValue() != null) {
-                Optional<TypeEntity> typeFromBackend = this.typeService.get(event.getValue().getId());
-                if (typeFromBackend.isPresent()) {
-                    populateForm(typeFromBackend.get());
+                Optional<LanguageEntity> languageFromBackend = this.languageService.get(event.getValue().getId());
+                if (languageFromBackend.isPresent()) {
+                    populateForm(languageFromBackend.get());
                 } else {
                     refreshGrid(grid);
                 }
@@ -70,7 +70,7 @@ public class TypeView extends CommonEntityLayout {
             }
         });
 
-        setBinder(new BeanValidationBinder<>(TypeEntity.class));
+        setBinder(new BeanValidationBinder<>(LanguageEntity.class));
         getBinder().bindInstanceFields(this);
 
         getCancel().addClickListener(event -> {
@@ -80,12 +80,12 @@ public class TypeView extends CommonEntityLayout {
 
         getSave().addClickListener(event -> {
             try {
-                if (this.typeEntity == null) {
-                    this.typeEntity = new TypeEntity();
+                if (this.languageEntity == null) {
+                    this.languageEntity = new LanguageEntity();
                 }
-                getBinder().writeBean(this.typeEntity);
+                getBinder().writeBean(this.languageEntity);
 
-                this.typeService.update(this.typeEntity);
+                this.languageService.update(this.languageEntity);
                 clearForm();
                 refreshGrid(grid);
                 Notification.show(ITEM_SAVED);
@@ -95,10 +95,10 @@ public class TypeView extends CommonEntityLayout {
         });
 
         getDelete().addClickListener(event -> {
-            if (this.typeEntity != null && this.typeEntity.getId() != null) {
+            if (this.languageEntity != null && this.languageEntity.getId() != null) {
                 ConfirmationDialog confirmationDialog = new ConfirmationDialog(ITEM_DELETION,
-                        ITEM_DELETION_CONFIRMATION + this.typeEntity.getName() + " ?", confirm -> {
-                    this.typeService.delete(this.typeEntity.getId());
+                        ITEM_DELETION_CONFIRMATION + this.languageEntity.getName() + " ?", confirm -> {
+                    this.languageService.delete(this.languageEntity.getId());
                     clearForm();
                     refreshGrid(grid);
                     Notification.show(ITEM_DELETED);
@@ -133,12 +133,13 @@ public class TypeView extends CommonEntityLayout {
 
     @Override
     public <T extends BaseEntity> void populateForm(T entity) {
-        this.typeEntity = (TypeEntity) entity;
-        getBinder().readBean(this.typeEntity);
+        this.languageEntity = (LanguageEntity) entity;
+        getBinder().readBean(this.languageEntity);
     }
 
     @Override
-    public BeanValidationBinder<TypeEntity> getBinder() {
-        return ((BeanValidationBinder<TypeEntity>) super.getBinder());
+    public BeanValidationBinder<LanguageEntity> getBinder() {
+        return ((BeanValidationBinder<LanguageEntity>) super.getBinder());
     }
 }
+

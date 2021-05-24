@@ -1,0 +1,33 @@
+.equipment-view {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.equipment-view .grid-wrapper {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.equipment-view .full-size {
+    width: 100%;
+    height: 100%;
+}
+
+.equipment-view #editor-layout {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.equipment-view #editor {
+    padding: var(--lumo-space-l);
+    flex-grow: 1;
+}
+
+.equipment-view #button-layout {
+    width: 100%;
+    flex-wrap: wrap;
+    background-color: var(--lumo-contrast-5pct);
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+}

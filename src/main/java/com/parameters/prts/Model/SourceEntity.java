@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "literature")
-public class LiteratureEntity extends BaseEntity {
+@Table(name = "source")
+public class SourceEntity extends BaseEntity {
 
     @Column(name = "website")
     private String website;
@@ -17,15 +17,15 @@ public class LiteratureEntity extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(mappedBy = "literature")
-    private final Set<LiteratureNamesEntity> literatureNames = new HashSet<>();
+    @OneToMany(mappedBy = "source")
+    private final Set<MethodEntity> methods = new HashSet<>();
 
     public String getWebsite() {
         return website;
     }
 
-    public void setWebsite(String site) {
-        this.website = site;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public String getTitle() {
@@ -36,13 +36,13 @@ public class LiteratureEntity extends BaseEntity {
         this.title = title;
     }
 
-    public Set<LiteratureNamesEntity> getLiteratureNames() {
-        return literatureNames;
+    public Set<MethodEntity> getMethods() {
+        return methods;
     }
 
     @Override
     public String toString() {
-        return "Литература (" +
+        return "Источник (" +
                 "название : " + title +
                 ')';
     }
